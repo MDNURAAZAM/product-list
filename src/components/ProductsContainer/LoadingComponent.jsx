@@ -10,6 +10,8 @@ const LoadingComponent = () => {
       <LoadingItem />
       <LoadingItem />
       <LoadingItem />
+      <LoadingItem />
+      <LoadingItem />
     </>
   );
 };
