@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SeacrhContainer from "./SeacrhContainer";
 import SortContainer from "./SortContainer";
 import FilterContainer from "./FilterContainer";
 import CartContainer from "./CartContainer";
 import { useProducts } from "../../hooks/useProducts";
 import ProductItem from "./ProductItem";
-import LoadingComponent from "./LoadingComponent";
+
 import { useCategories } from "../../hooks/useCategories";
+import LoadingComponent from "../LoadingComponent/LoadingComponent";
+import { useDebounce } from "../../hooks/useDebounce";
+import { sortProducts } from "../../utils";
 
 const ProductsContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [cart, setCart] = useState([]);
   const [isAscending, setIsAscending] = useState(true);
+  const [value, setValue] = useState("");
+
+  const debouncedValue = useDebounce(value, 500);
 
   const {
     products,
@@ -42,11 +48,13 @@ const ProductsContainer = () => {
     setIsAscending(value);
   };
 
-  const updatedProducts = [...products]?.sort((a, b) =>
-    isAscending ? a?.price - b?.price : b?.price - a?.price
+  const updatedProducts = sortProducts(products, isAscending)?.filter(
+    (product) =>
+      product.title.toLowerCase()?.includes(debouncedValue?.toLowerCase())
   );
 
   let component;
+
   if (isProductsLoading || isCategoryLoading) {
     component = <LoadingComponent />;
   } else if (isProductsError || isCategoryError) {
@@ -89,7 +97,7 @@ const ProductsContainer = () => {
 
             {/* <!-- Search and Cart --> */}
             <div className="flex gap-2 items-center">
-              <SeacrhContainer />
+              <SeacrhContainer value={value} setValue={setValue} />
               <CartContainer cartLength={cart?.length} />
             </div>
           </div>
