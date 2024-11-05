@@ -1,9 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import FilterSVG from "../SVGs/FilterSVG";
 import { capitilizeFirstLetter } from "../../utils";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 
-const FilterContainer = ({ categories }) => {
+const FilterContainer = ({
+  categories,
+  selectedCategory,
+  onCategoryChange,
+}) => {
   const [show, setShow] = useState(false);
 
   const buttonRef = useRef(null);
@@ -52,6 +56,8 @@ const FilterContainer = ({ categories }) => {
                     type="checkbox"
                     className="form-checkbox h-4 w-4"
                     id="filter-option-1"
+                    checked={category === selectedCategory}
+                    onChange={() => onCategoryChange(category)}
                   />
                   <span className="ml-2">
                     {capitilizeFirstLetter(category)}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SeacrhContainer from "./SeacrhContainer";
 import SortContainer from "./SortContainer";
 import FilterContainer from "./FilterContainer";
@@ -9,17 +9,22 @@ import LoadingComponent from "./LoadingComponent";
 import { useCategories } from "../../hooks/useCategories";
 
 const ProductsContainer = () => {
+  const [selectedCategory, setSelectedCategory] = useState("");
   const {
     products,
     isLoading: isProductsLoading,
     isError: isProductsError,
-  } = useProducts();
+  } = useProducts(selectedCategory);
 
   const {
     categories,
     isLoading: isCategoryLoading,
     isError: isCategoryError,
   } = useCategories();
+
+  const handleCategoryChange = (value) => {
+    setSelectedCategory((prev) => (prev === value ? "" : value));
+  };
 
   let component;
   if (isProductsLoading || isCategoryLoading) {
@@ -50,7 +55,11 @@ const ProductsContainer = () => {
             {/* <!-- Sort & Filter--> */}
             <div className="w-full">
               <SortContainer />
-              <FilterContainer categories={categories} />
+              <FilterContainer
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onCategoryChange={handleCategoryChange}
+              />
             </div>
 
             {/* <!-- Search and Cart --> */}
