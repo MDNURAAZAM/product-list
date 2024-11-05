@@ -11,6 +11,8 @@ import { useCategories } from "../../hooks/useCategories";
 const ProductsContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [cart, setCart] = useState([]);
+  const [isAscending, setIsAscending] = useState(true);
+
   const {
     products,
     isLoading: isProductsLoading,
@@ -36,6 +38,14 @@ const ProductsContainer = () => {
     }
   };
 
+  const handleSortChange = (value) => {
+    setIsAscending(value);
+  };
+
+  const updatedProducts = [...products]?.sort((a, b) =>
+    isAscending ? a?.price - b?.price : b?.price - a?.price
+  );
+
   let component;
   if (isProductsLoading || isCategoryLoading) {
     component = <LoadingComponent />;
@@ -43,8 +53,8 @@ const ProductsContainer = () => {
     component = <div>Error...</div>;
   } else {
     component =
-      products?.length > 0 &&
-      products?.map((product) => (
+      updatedProducts?.length > 0 &&
+      updatedProducts?.map((product) => (
         <ProductItem
           key={product.id}
           product={product}
@@ -69,7 +79,7 @@ const ProductsContainer = () => {
           <div className="flex justify-between relative mx-auto max-w-7xl px-4 sm:static sm:px-6 lg:px-8">
             {/* <!-- Sort & Filter--> */}
             <div className="w-full">
-              <SortContainer />
+              <SortContainer onSortChange={handleSortChange} />
               <FilterContainer
                 categories={categories}
                 selectedCategory={selectedCategory}

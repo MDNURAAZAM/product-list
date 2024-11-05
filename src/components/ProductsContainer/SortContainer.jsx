@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SortSVG from "../SVGs/SortSVG";
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 
-const SortContainer = () => {
+const SortContainer = ({ onSortChange }) => {
   const [show, setShow] = useState(false);
 
   const buttonRef = useRef(null);
@@ -14,6 +14,12 @@ const SortContainer = () => {
   //toggling visiblity
   const handleToggle = () => {
     setShow((s) => !s);
+  };
+
+  //sort options click handler
+  const handleSortAsceneding = (value) => {
+    onSortChange(value);
+    setShow(false);
   };
 
   return (
@@ -46,8 +52,7 @@ const SortContainer = () => {
               className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-all"
               role="menuitem"
               tabIndex="-1"
-              //   onclick="toggleDropdown()"
-              id="menu-item-0"
+              onClick={() => handleSortAsceneding(true)}
             >
               Low to High
             </span>
@@ -56,8 +61,7 @@ const SortContainer = () => {
               className="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-all"
               role="menuitem"
               tabIndex="-1"
-              //   onclick="toggleDropdown()"
-              id="menu-item-0"
+              onClick={() => handleSortAsceneding(false)}
             >
               High to Low
             </span>
