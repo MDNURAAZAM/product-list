@@ -10,6 +10,8 @@ import { useCategories } from "../../hooks/useCategories";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { useDebounce } from "../../hooks/useDebounce";
 import { sortProducts } from "../../utils";
+import NoProductsFound from "../NoProductsFound/NoProductsFound";
+import ErrorComponent from "../ErrorComponent/ErrorComponent";
 
 const ProductsContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -58,18 +60,21 @@ const ProductsContainer = () => {
   if (isProductsLoading || isCategoryLoading) {
     component = <LoadingComponent />;
   } else if (isProductsError || isCategoryError) {
-    component = <div>Error...</div>;
+    component = <ErrorComponent />;
   } else {
     component =
-      updatedProducts?.length > 0 &&
-      updatedProducts?.map((product) => (
-        <ProductItem
-          key={product.id}
-          product={product}
-          cart={cart}
-          onAddCart={handleCart}
-        />
-      ));
+      updatedProducts?.length > 0 ? (
+        updatedProducts?.map((product) => (
+          <ProductItem
+            key={product.id}
+            product={product}
+            cart={cart}
+            onAddCart={handleCart}
+          />
+        ))
+      ) : (
+        <NoProductsFound></NoProductsFound>
+      );
   }
 
   return (
