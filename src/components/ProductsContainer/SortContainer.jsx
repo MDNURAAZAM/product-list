@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import SortSVG from "../SVGs/SortSVG";
+import { useOutsideClick } from "../../hooks/useOutsideClick";
 
 const SortContainer = () => {
   const [show, setShow] = useState(false);
@@ -7,29 +8,13 @@ const SortContainer = () => {
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
 
+  //handle outside click
+  useOutsideClick({ buttonRef, dropdownRef, setShow });
+
   //toggling visiblity
   const handleToggle = () => {
     setShow((s) => !s);
   };
-
-  //outside click handler
-  const handleOutsideClick = (event) => {
-    const button = buttonRef.current;
-    const dropdown = dropdownRef.current;
-    if (button && dropdown) {
-      if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-        setShow(false);
-      }
-    }
-  };
-
-  //handling outside click
-  useEffect(() => {
-    document.addEventListener("click", handleOutsideClick);
-    return () => {
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, []);
 
   return (
     <div className="relative inline-block text-left">
