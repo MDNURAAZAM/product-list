@@ -1,15 +1,29 @@
 import React from "react";
-import SearchSVG from "../SVGs/SearchSVG";
-import CartSVG from "../SVGs/CartSVG";
-import SortSVG from "../SVGs/SortSVG";
-import FilterSVG from "../SVGs/FilterSVG";
-import Products from "./Products";
 import SeacrhContainer from "./SeacrhContainer";
 import SortContainer from "./SortContainer";
 import FilterContainer from "./FilterContainer";
 import CartContainer from "./CartContainer";
+import { useProducts } from "../../hooks/useProducts";
+import ProductItem from "./ProductItem";
+import LoadingComponent from "./LoadingComponent";
 
 const ProductsContainer = () => {
+  const { products, isLoading, isError } = useProducts();
+
+  let component;
+  if (isLoading) {
+    component = <LoadingComponent />;
+  } else if (isError) {
+    component = <div>Error...</div>;
+  } else {
+    component =
+      products?.length > 0 &&
+      products?.map((product) => (
+        <ProductItem key={product.id} product={product} />
+      ));
+  }
+
+
   return (
     <div>
       <div className="pt-16 sm:pt-24 lg:pt-40">
@@ -37,7 +51,15 @@ const ProductsContainer = () => {
           </div>
         </div>
 
-        <Products />
+        <div>
+          <div className="bg-white">
+            <div className="mx-auto max-w-2xl px-4 py-4 sm:px-6 lg:max-w-7xl lg:px-8">
+              <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                {component}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
