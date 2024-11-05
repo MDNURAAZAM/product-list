@@ -1,13 +1,13 @@
 import React from "react";
 
-const CartSVG = () => {
+const CartSVG = ({ cartLength }) => {
   return (
     <svg
       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth="1.5"
-      stroke="currentColor"
+      stroke={cartLength > 0 ? "#0c9488" : "currentColor"}
       aria-hidden="true"
     >
       <path

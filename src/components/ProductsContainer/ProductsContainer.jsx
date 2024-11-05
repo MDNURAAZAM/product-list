@@ -10,6 +10,7 @@ import { useCategories } from "../../hooks/useCategories";
 
 const ProductsContainer = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [cart, setCart] = useState([]);
   const {
     products,
     isLoading: isProductsLoading,
@@ -26,6 +27,15 @@ const ProductsContainer = () => {
     setSelectedCategory((prev) => (prev === value ? "" : value));
   };
 
+  const handleCart = (id) => {
+    const alreadyInCart = cart?.includes(id);
+    if (alreadyInCart) {
+      setCart((prev) => prev?.filter((pId) => pId != id));
+    } else {
+      setCart((prev) => [...prev, id]);
+    }
+  };
+
   let component;
   if (isProductsLoading || isCategoryLoading) {
     component = <LoadingComponent />;
@@ -35,7 +45,12 @@ const ProductsContainer = () => {
     component =
       products?.length > 0 &&
       products?.map((product) => (
-        <ProductItem key={product.id} product={product} />
+        <ProductItem
+          key={product.id}
+          product={product}
+          cart={cart}
+          onAddCart={handleCart}
+        />
       ));
   }
 
@@ -65,7 +80,7 @@ const ProductsContainer = () => {
             {/* <!-- Search and Cart --> */}
             <div className="flex gap-2 items-center">
               <SeacrhContainer />
-              <CartContainer />
+              <CartContainer cartLength={cart?.length} />
             </div>
           </div>
         </div>
