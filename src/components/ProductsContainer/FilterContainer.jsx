@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import FilterSVG from "../SVGs/FilterSVG";
+import { capitilizeFirstLetter } from "../../utils";
 
-const FilterContainer = () => {
+const FilterContainer = ({ categories }) => {
   const [show, setShow] = useState(false);
 
   const buttonRef = useRef(null);
@@ -56,30 +57,22 @@ const FilterContainer = () => {
           tabIndex="-1"
         >
           <div className="py-1" role="none">
-            <label className="inline-flex w-full cursor-pointer hover:bg-gray-50 items-center px-4 py-2 text-sm text-gray-700">
-              <input
-                type="checkbox"
-                className="form-checkbox h-4 w-4"
-                id="filter-option-1"
-              />
-              <span className="ml-2">Category 1</span>
-            </label>
-            <label className="inline-flex w-full cursor-pointer hover:bg-gray-50 items-center px-4 py-2 text-sm text-gray-700">
-              <input
-                type="checkbox"
-                className="form-checkbox h-4 w-4"
-                id="filter-option-2"
-              />
-              <span className="ml-2">Category 2</span>
-            </label>
-            <label className="inline-flex w-full cursor-pointer hover:bg-gray-50 items-center px-4 py-2 text-sm text-gray-700">
-              <input
-                type="checkbox"
-                className="form-checkbox h-4 w-4"
-                id="filter-option-3"
-              />
-              <span className="ml-2">Category 3</span>
-            </label>
+            {categories?.length > 0 &&
+              categories?.map((category) => (
+                <label
+                  key={category}
+                  className="inline-flex w-full cursor-pointer hover:bg-gray-50 items-center px-4 py-2 text-sm text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    className="form-checkbox h-4 w-4"
+                    id="filter-option-1"
+                  />
+                  <span className="ml-2">
+                    {capitilizeFirstLetter(category)}
+                  </span>
+                </label>
+              ))}
           </div>
         </div>
       )}

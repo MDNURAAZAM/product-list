@@ -1,5 +1,6 @@
 import React from "react";
 import AddToCartSVG from "../SVGs/AddToCartSVG";
+import { capitilizeFirstLetter } from "../../utils";
 
 const ProductItem = ({ product }) => {
   const { id, title, price, category, description, image } = product || {};
@@ -16,7 +17,7 @@ const ProductItem = ({ product }) => {
         <div>
           <h3 style={{height: '4rem'}} className="text-sm text-gray-700">{title}</h3>
           <p className="mt-1 text-sm text-gray-500">
-            {category.charAt(0).toUpperCase() + category.slice(1)}
+            {capitilizeFirstLetter(category)}
           </p>
         </div>
         <p className="text-sm font-medium text-gray-900">${price}</p>

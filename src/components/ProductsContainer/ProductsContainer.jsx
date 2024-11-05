@@ -6,14 +6,25 @@ import CartContainer from "./CartContainer";
 import { useProducts } from "../../hooks/useProducts";
 import ProductItem from "./ProductItem";
 import LoadingComponent from "./LoadingComponent";
+import { useCategories } from "../../hooks/useCategories";
 
 const ProductsContainer = () => {
-  const { products, isLoading, isError } = useProducts();
+  const {
+    products,
+    isLoading: isProductsLoading,
+    isError: isProductsError,
+  } = useProducts();
+
+  const {
+    categories,
+    isLoading: isCategoryLoading,
+    isError: isCategoryError,
+  } = useCategories();
 
   let component;
-  if (isLoading) {
+  if (isProductsLoading || isCategoryLoading) {
     component = <LoadingComponent />;
-  } else if (isError) {
+  } else if (isProductsError || isCategoryError) {
     component = <div>Error...</div>;
   } else {
     component =
@@ -22,7 +33,6 @@ const ProductsContainer = () => {
         <ProductItem key={product.id} product={product} />
       ));
   }
-
 
   return (
     <div>
@@ -40,7 +50,7 @@ const ProductsContainer = () => {
             {/* <!-- Sort & Filter--> */}
             <div className="w-full">
               <SortContainer />
-              <FilterContainer />
+              <FilterContainer categories={categories} />
             </div>
 
             {/* <!-- Search and Cart --> */}
